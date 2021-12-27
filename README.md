@@ -39,6 +39,13 @@ Other things you'll need:
 1. Setup in your mastodon instance the require app (e.g., https://[YOUR-INSTANCE]/settings/applications/)
 2. Setup an elevated app on Twitter (https://developer.twitter.com/en/portal/dashboard)
 
+## The crontab
+Every 15 minutes, check and sync as needed.
+
+```
+*/15 * * * * python3 /work/src/ribeiro-social-sync/ribeiro-social-sync.py --log=/home/justin/.ribeiro-social-sync.py/cron.log >> /home/justin/.ribeiro-social-sync.py/cron.log 2>&1
+```
+
 ## License
 
 This software is distributed under [the MIT license](./LICENSE) and was forked from Takuto ASAKURA ([wtsnjp](https://github.com/wtsnjp)) [twoot.py](https://github.com/wtsnjp/twoot.py) project.
