@@ -558,11 +558,24 @@ class Twoot:
             media_ids = [m["media_id_string"] for m in twitter_media if m is not None]
             media_num = len(media_ids)
 
-        # treat text
+        # this is all really hacky on my part I'm basically saying "if I have
+        # links, cut'em out so I can count a little and ellipse the text, not
+        # the link" and then piece it back together
         toot_text = self.__pre_process(toot["content"])
-        toot_sliced = (toot_text[:253] + "...") if len(toot_text) > 253 else toot_text
+        toot_links = re.search("(?P<url>https?://[^\s]+)", toot_text).group("url")
+        toot_reduced = re.sub("(?P<url>https?://[^\s]+)", '', toot_text)
 
-        text = f"{toot_sliced} {toot['url']}"
+        # it starts at 253 because the permalink and then basically hack that
+        # down another 23 chars if there is another link since Twitter will
+        # handle this reduction for links
+        string_len = 253
+        if len(toot_links) > 0:
+            string_len = 253 - 23
+
+        toot_sliced = (toot_reduced[:string_len] + "...") if len(toot_text) > string_len else toot_reduced
+
+        # oh a just hacky christmas special
+        text = f"{toot_sliced} {toot_links} {toot['url']}"
 
         # try to create a tweet
         if media_num > 0:
