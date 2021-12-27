@@ -2,6 +2,8 @@
 
 Sync Mastodon to Twitter nicely one-way. A very specific fork from [twoot.py](https://github.com/wtsnjp/twoot.py) (you should probably just use that!)
 
+![example](https://user-images.githubusercontent.com/643503/147498591-a45ba050-e8b5-43d1-b664-060d087fcee3.png)
+
 ## What's the difference from Twoot.py?
 
 I forked it because:
