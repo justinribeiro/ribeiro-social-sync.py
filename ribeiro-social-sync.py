@@ -562,8 +562,11 @@ class Twoot:
         # links, cut'em out so I can count a little and ellipse the text, not
         # the link" and then piece it back together
         toot_text = self.__pre_process(toot["content"])
-        toot_links = re.search("(?P<url>https?://[^\s]+)", toot_text).group("url")
-        toot_reduced = re.sub("(?P<url>https?://[^\s]+)", '', toot_text)
+        toot_links = ""
+        toot_search = re.search("(?P<url>https?://[^\s]+)", toot_text)
+        if toot_search is not None:
+            toot_links = toot_search.group("url")
+        toot_reduced = re.sub("(?P<url>https?://[^\s]+)", "", toot_text)
 
         # it starts at 253 because the permalink and then basically hack that
         # down another 23 chars if there is another link since Twitter will
@@ -604,13 +607,6 @@ class Twoot:
 
                 logger.info("Forwarded a toot (id: {}) as a tweet (id: {})".format(toot_id, tweet_id))
 
-
-            # NOTE: only under development
-            # logger.debug('Processing tweet info: {}'.format(t))
-
-            # create a toot if necessary
-            self.create_toot_from_tweet(t, dry_run)
-
     def toots2tweets(self, toots, dry_run=False):
         # process from the oldest one
         for t in reversed(toots):
@@ -630,7 +626,7 @@ class Twoot:
         data["twoots"] = self.twoots + data["twoots"]
 
         # keep the number of stored twoots less than max_twoots
-        data["twoots"] = data["twoots"][: self.config["max_twoots"]]
+        data["twoots"] = data["twoots"][:1000]
 
         # save data
         with open(self.data_file, "wb") as f:
